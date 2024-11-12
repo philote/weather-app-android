@@ -1,0 +1,25 @@
+# Gradle files
+.gradle
+build/
+
+# Local configuration file (sdk path, etc)
+/local.properties
+local.properties
+
+# IntelliJ
+*.iml
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+
+# Android Studio generated files and folders
+/captures
+.externalNativeBuild
+.cxx
+
+#OS
+.DS_Store
+._*
