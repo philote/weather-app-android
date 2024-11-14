@@ -1,13 +1,13 @@
 package com.josephhopson.weatherapp.data
 
 import android.util.Log
-import com.josephhopson.weatherapp.model.Forecast
+import com.josephhopson.weatherapp.model.FiveDayForecast
 import com.josephhopson.weatherapp.network.WeatherApi
 import retrofit2.HttpException
 import java.io.IOException
 
 sealed interface WeatherApiResult {
-    data class Success(val forecasts: List<Forecast>) : WeatherApiResult
+    data class Success(val fiveDayForecast: FiveDayForecast) : WeatherApiResult
     data object Error : WeatherApiResult
 }
 
@@ -37,8 +37,7 @@ class NetworkWeatherDataRepository() : WeatherRepository {
         return try {
             val result = WeatherApi.retrofitService.getForecast(latitude, longitude)
             Log.d("Forecast", result.toString())
-            Log.d("Forecast List", result.forecasts.toString())
-            WeatherApiResult.Success(result.forecasts)
+            WeatherApiResult.Success(result)
         } catch (e: IOException) {
             Log.e("Forecast:IOException", e.message.toString())
             WeatherApiResult.Error

@@ -10,7 +10,9 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.josephhopson.weatherapp.R
 import com.josephhopson.weatherapp.ui.screens.HomeScreen
 import com.josephhopson.weatherapp.ui.theme.WeatherAppTheme
 
@@ -39,7 +41,7 @@ fun WeatherAppBar(modifier: Modifier = Modifier) {
         ),
         title = {
             Text(
-                text = "Weather App",
+                text = stringResource(R.string.app_name),
                 style = MaterialTheme.typography.headlineSmall,
             )
         },

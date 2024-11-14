@@ -2,6 +2,7 @@ package com.josephhopson.weatherapp.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import java.math.RoundingMode
 
 //
 /**
@@ -32,17 +33,24 @@ data class Forecast(
     @SerialName("dt_txt") var dtTxt: String = ""
 )
 
+// This should be Unit tested
+fun Double.converterKelvinToFahrenheit(): Double {
+    val CelsiusData = this - 273.15
+    val fahrenheitData = (CelsiusData + 9.0 / 5.0) + 32
+    return fahrenheitData.toBigDecimal().setScale(2, RoundingMode.UP).toDouble()
+}
+
 @Serializable
 data class Main(
-    var temp: Float = -1F,
-    @SerialName("feels_like") var feelsLike: Float = -1F,
-    @SerialName("temp_min") var tempMin: Float = -1F,
-    @SerialName("temp_max") var tempMax: Float = -1F,
+    var temp: Double = -1.0,
+    @SerialName("feels_like") var feelsLike: Double = -1.0,
+    @SerialName("temp_min") var tempMin: Double = -1.0,
+    @SerialName("temp_max") var tempMax: Double = -1.0,
     var pressure: Int = -1,
     @SerialName("sea_level") var seaLevel: Int = -1,
     @SerialName("grnd_level") var grndLevel: Int = -1,
     var humidity: Int = -1,
-    @SerialName("temp_kf") var tempKf: Float = -1F
+    @SerialName("temp_kf") var tempKf: Double = -1.0
 )
 
 @Serializable
@@ -57,9 +65,9 @@ data class Weather(
 
 @Serializable
 data class Wind(
-    var speed: Float = -1F,
+    var speed: Double = -1.0,
     var deg: Int = -1,
-    var gust: Float = -1F
+    var gust: Double = -1.0
 )
 
 @Serializable data class Sys( var pod: String = "")
@@ -79,6 +87,6 @@ data class City(
 
 @Serializable
 data class Coord(
-    var lat: Float = -1F,
-    var lon: Float = -1F
+    var lat: Double = -1.0,
+    var lon: Double = -1.0
 )

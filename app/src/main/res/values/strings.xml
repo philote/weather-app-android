@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">WeatherApp</string>
+    <string name="app_name">Weather App</string>
+    <string name="btn_submit">Submit</string>
+    <string name="txt_field_enter_your_zip">Enter Your Zip Code</string>
+    <string name="loading">Loading</string>
+    <string name="error">Error</string>
+    <string name="enter_your_zip_code_above">Enter Your Zip Code Above</string>
 </resources>

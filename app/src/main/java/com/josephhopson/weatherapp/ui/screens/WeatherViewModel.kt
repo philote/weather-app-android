@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.josephhopson.weatherapp.data.NetworkWeatherDataRepository
 import com.josephhopson.weatherapp.data.WeatherApiResult
+import com.josephhopson.weatherapp.model.FiveDayForecast
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,12 +15,13 @@ import kotlinx.coroutines.launch
 
 data class AppUIState(
 //    val currentZipCode: String = ""
-    val weatherUiState: WeatherUiState = WeatherUiState.Loading
+    val weatherUiState: WeatherUiState = WeatherUiState.Landing
 )
 sealed interface WeatherUiState {
-    data class Success(val weather: String) : WeatherUiState
+    data class Success(val fiveDayForecast: FiveDayForecast) : WeatherUiState
     data object Error : WeatherUiState
     data object Loading : WeatherUiState
+    data object Landing : WeatherUiState
 }
 
 class WeatherViewModel: ViewModel() {
@@ -35,7 +37,9 @@ class WeatherViewModel: ViewModel() {
     }
 
     fun getWeatherData() {
-        // TODO Clear the current data
+        _uiState.value = AppUIState(
+            weatherUiState = WeatherUiState.Loading
+        )
         viewModelScope.launch {
             _uiState.value = AppUIState(
                 weatherUiState = getWeatherDataFromRepo()
@@ -50,7 +54,7 @@ class WeatherViewModel: ViewModel() {
             val weatherApiResult = weatherRepository.getWeatherForecast(userZipCode)
         ) {
             is WeatherApiResult.Success -> {
-                WeatherUiState.Success(weatherApiResult.forecasts.toString())
+                WeatherUiState.Success(weatherApiResult.fiveDayForecast)
             }
             WeatherApiResult.Error -> WeatherUiState.Error
         }
