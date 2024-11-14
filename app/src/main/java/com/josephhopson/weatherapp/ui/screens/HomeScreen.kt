@@ -14,26 +14,28 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.josephhopson.weatherapp.ui.theme.WeatherAppTheme
 
 @Composable
-fun HomeScreen(
-    weatherUiState: WeatherUiState
-) {
+fun HomeScreen(weatherViewModel: WeatherViewModel = viewModel()) {
+    val weatherUIState by weatherViewModel.uiState.collectAsState()
     WeatherView(
-        weatherUiState,
+        weatherApiUiState = weatherUIState.weatherApiUiState,
     )
 }
 
 @Composable
 fun WeatherView(
-    weatherUiState: WeatherUiState,
+    weatherApiUiState: WeatherApiUiState,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -72,22 +74,22 @@ fun WeatherView(
                 fontSize = 16.sp
             )
         }
-        when(weatherUiState) {
-            WeatherUiState.Loading -> LoadingScreen(modifier = modifier.fillMaxSize())
-            WeatherUiState.Error -> ErrorScreen(modifier = modifier.fillMaxSize())
-            is WeatherUiState.Success -> ResultScreen(
-                weather = weatherUiState.weather,
+        when(weatherApiUiState) {
+            WeatherApiUiState.Loading -> LoadingScreen(modifier = modifier.fillMaxSize())
+            WeatherApiUiState.Error -> ErrorScreen(modifier = modifier.fillMaxSize())
+            is WeatherApiUiState.Success -> ResultScreen(
+                weather = weatherApiUiState.weather,
                 modifier.padding(top = 16.dp)
             )
         }
     }
 }
 
-@Preview(showBackground = true)
+@Preview(apiLevel = 33, showBackground = true, showSystemUi = true)
 @Composable
 fun WeatherViewPreview() {
     WeatherAppTheme {
-        WeatherView(WeatherUiState.Loading)
+        WeatherView(WeatherApiUiState.Loading)
     }
 }
 

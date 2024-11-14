@@ -14,6 +14,7 @@ local.properties
 /.idea/workspace.xml
 /.idea/navEditor.xml
 /.idea/assetWizardSettings.xml
+.idea/
 
 # Android Studio generated files and folders
 /captures
@@ -23,3 +24,4 @@ local.properties
 #OS
 .DS_Store
 ._*
+
