@@ -26,15 +26,70 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.josephhopson.weatherapp.ui.theme.WeatherAppTheme
 
 @Composable
-fun HomeScreen(weatherViewModel: WeatherViewModel = viewModel()) {
+fun HomeScreen(
+    weatherViewModel: WeatherViewModel = viewModel(),
+    modifier: Modifier = Modifier
+) {
     val weatherUIState by weatherViewModel.uiState.collectAsState()
-    WeatherView(
-        weatherApiUiState = weatherUIState.weatherApiUiState,
-    )
+    val weatherApiUiState = weatherUIState.weatherApiUiState
+//    WeatherView(
+//        onUserZipCodeChanged = { weatherViewModel.updateUserZipCode(it) },
+//        onKeyboardDone = { },
+//        userZip = weatherViewModel.userZipCode,
+//        weatherApiUiState = weatherUIState.weatherApiUiState,
+//    )
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        OutlinedTextField(
+            value = weatherViewModel.userZipCode,
+            singleLine = true,
+            shape = MaterialTheme.shapes.large,
+            modifier = modifier.fillMaxWidth(),
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = MaterialTheme.colorScheme.surface,
+                unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                disabledContainerColor = MaterialTheme.colorScheme.surface,
+            ),
+            onValueChange = { weatherViewModel.updateUserZipCode(it) },
+            label = { Text("Enter Your Zip Code") },
+            isError = false,
+            keyboardOptions = KeyboardOptions.Default.copy(
+                imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = { /*TODO*/ }
+            )
+        )
+        Button(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = { weatherViewModel.getWeatherData() })
+        {
+            Text(
+                text = "Submit",
+                fontSize = 16.sp
+            )
+        }
+        when(weatherApiUiState) {
+            WeatherApiUiState.Loading -> LoadingScreen(modifier = modifier.fillMaxSize())
+            WeatherApiUiState.Error -> ErrorScreen(modifier = modifier.fillMaxSize())
+            is WeatherApiUiState.Success -> ResultScreen(
+                weather = weatherApiUiState.weather,
+                modifier.padding(top = 16.dp)
+            )
+        }
+    }
 }
 
 @Composable
 fun WeatherView(
+    onUserZipCodeChanged: (String) -> Unit,
+    onKeyboardDone: () -> Unit,
+    userZip: String,
     weatherApiUiState: WeatherApiUiState,
     modifier: Modifier = Modifier
 ) {
@@ -46,7 +101,7 @@ fun WeatherView(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         OutlinedTextField(
-            value = "",
+            value = userZip,
             singleLine = true,
             shape = MaterialTheme.shapes.large,
             modifier = modifier.fillMaxWidth(),
@@ -55,14 +110,14 @@ fun WeatherView(
                 unfocusedContainerColor = MaterialTheme.colorScheme.surface,
                 disabledContainerColor = MaterialTheme.colorScheme.surface,
             ),
-            onValueChange = { /*TODO*/ },
+            onValueChange = onUserZipCodeChanged,
             label = { Text("Enter Your Zip Code") },
             isError = false,
             keyboardOptions = KeyboardOptions.Default.copy(
                 imeAction = ImeAction.Done
             ),
             keyboardActions = KeyboardActions(
-                onDone = { /*TODO*/ }
+                onDone = { onKeyboardDone() }
             )
         )
         Button(
@@ -89,7 +144,12 @@ fun WeatherView(
 @Composable
 fun WeatherViewPreview() {
     WeatherAppTheme {
-        WeatherView(WeatherApiUiState.Loading)
+        WeatherView(
+            onUserZipCodeChanged = { },
+            onKeyboardDone = { },
+            userZip = "80003",
+            weatherApiUiState = WeatherApiUiState.Loading
+        )
     }
 }
 
