@@ -14,13 +14,13 @@ data class FiveDayForecast(
     var cod: String = "",
     var message: Int = -1,
     var cnt: Int = -1,
-    var list: ArrayList<List> = arrayListOf(),
+    @SerialName("list") var forecasts: ArrayList<Forecast> = arrayListOf(),
     var city: City = City()
 )
 
 // List of forecasts
 @Serializable
-data class List(
+data class Forecast(
     var dt: Int = -1,
     var main: Main = Main(),
     var weather: ArrayList<Weather> = arrayListOf(),
@@ -29,20 +29,20 @@ data class List(
     var visibility: Int = -1,
     var pop: Int = -1,
     var sys: Sys = Sys(),
-    @SerialName("dtTxt") var dtTxt: String = ""
+    @SerialName("dt_txt") var dtTxt: String = ""
 )
 
 @Serializable
 data class Main(
     var temp: Float = -1F,
-    @SerialName("feelsLike") var feelsLike: Float = -1F,
-    @SerialName("tempMin") var tempMin: Float = -1F,
-    @SerialName("tempMax") var tempMax: Float = -1F,
+    @SerialName("feels_like") var feelsLike: Float = -1F,
+    @SerialName("temp_min") var tempMin: Float = -1F,
+    @SerialName("temp_max") var tempMax: Float = -1F,
     var pressure: Int = -1,
-    @SerialName("seaLevel") var seaLevel: Int = -1,
-    @SerialName("grndLevel") var grndLevel: Int = -1,
+    @SerialName("sea_level") var seaLevel: Int = -1,
+    @SerialName("grnd_level") var grndLevel: Int = -1,
     var humidity: Int = -1,
-    @SerialName("tempKf") var tempKf: Float = -1F
+    @SerialName("temp_kf") var tempKf: Float = -1F
 )
 
 @Serializable

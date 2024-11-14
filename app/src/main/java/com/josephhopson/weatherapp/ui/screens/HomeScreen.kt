@@ -31,13 +31,7 @@ fun HomeScreen(
     modifier: Modifier = Modifier
 ) {
     val weatherUIState by weatherViewModel.uiState.collectAsState()
-    val weatherApiUiState = weatherUIState.weatherApiUiState
-//    WeatherView(
-//        onUserZipCodeChanged = { weatherViewModel.updateUserZipCode(it) },
-//        onKeyboardDone = { },
-//        userZip = weatherViewModel.userZipCode,
-//        weatherApiUiState = weatherUIState.weatherApiUiState,
-//    )
+    val weatherApiUiState = weatherUIState.weatherUiState
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -75,9 +69,9 @@ fun HomeScreen(
             )
         }
         when(weatherApiUiState) {
-            WeatherApiUiState.Loading -> LoadingScreen(modifier = modifier.fillMaxSize())
-            WeatherApiUiState.Error -> ErrorScreen(modifier = modifier.fillMaxSize())
-            is WeatherApiUiState.Success -> ResultScreen(
+            WeatherUiState.Loading -> LoadingScreen(modifier = modifier.fillMaxSize())
+            WeatherUiState.Error -> ErrorScreen(modifier = modifier.fillMaxSize())
+            is WeatherUiState.Success -> ResultScreen(
                 weather = weatherApiUiState.weather,
                 modifier.padding(top = 16.dp)
             )
@@ -85,71 +79,12 @@ fun HomeScreen(
     }
 }
 
-@Composable
-fun WeatherView(
-    onUserZipCodeChanged: (String) -> Unit,
-    onKeyboardDone: () -> Unit,
-    userZip: String,
-    weatherApiUiState: WeatherApiUiState,
-    modifier: Modifier = Modifier
-) {
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        OutlinedTextField(
-            value = userZip,
-            singleLine = true,
-            shape = MaterialTheme.shapes.large,
-            modifier = modifier.fillMaxWidth(),
-            colors = TextFieldDefaults.colors(
-                focusedContainerColor = MaterialTheme.colorScheme.surface,
-                unfocusedContainerColor = MaterialTheme.colorScheme.surface,
-                disabledContainerColor = MaterialTheme.colorScheme.surface,
-            ),
-            onValueChange = onUserZipCodeChanged,
-            label = { Text("Enter Your Zip Code") },
-            isError = false,
-            keyboardOptions = KeyboardOptions.Default.copy(
-                imeAction = ImeAction.Done
-            ),
-            keyboardActions = KeyboardActions(
-                onDone = { onKeyboardDone() }
-            )
-        )
-        Button(
-            modifier = Modifier.fillMaxWidth(),
-            onClick = { /*TODO*/ })
-        {
-            Text(
-                text = "Submit",
-                fontSize = 16.sp
-            )
-        }
-        when(weatherApiUiState) {
-            WeatherApiUiState.Loading -> LoadingScreen(modifier = modifier.fillMaxSize())
-            WeatherApiUiState.Error -> ErrorScreen(modifier = modifier.fillMaxSize())
-            is WeatherApiUiState.Success -> ResultScreen(
-                weather = weatherApiUiState.weather,
-                modifier.padding(top = 16.dp)
-            )
-        }
-    }
-}
 
 @Preview(apiLevel = 33, showBackground = true, showSystemUi = true)
 @Composable
-fun WeatherViewPreview() {
+fun HomeScreenPreview() {
     WeatherAppTheme {
-        WeatherView(
-            onUserZipCodeChanged = { },
-            onKeyboardDone = { },
-            userZip = "80003",
-            weatherApiUiState = WeatherApiUiState.Loading
-        )
+        HomeScreen()
     }
 }
 
@@ -164,6 +99,14 @@ fun LoadingScreen(modifier: Modifier = Modifier) {
     }
 }
 
+@Preview(apiLevel = 33, showBackground = true, showSystemUi = true)
+@Composable
+fun LoadingScreenPreview() {
+    WeatherAppTheme {
+        LoadingScreen()
+    }
+}
+
 @Composable
 fun ErrorScreen(modifier: Modifier = Modifier) {
     Column(
@@ -175,6 +118,14 @@ fun ErrorScreen(modifier: Modifier = Modifier) {
     }
 }
 
+@Preview(apiLevel = 33, showBackground = true, showSystemUi = true)
+@Composable
+fun ErrorScreenPreview() {
+    WeatherAppTheme {
+        ErrorScreen()
+    }
+}
+
 @Composable
 fun ResultScreen(weather: String, modifier: Modifier = Modifier) {
     Box(
@@ -182,5 +133,13 @@ fun ResultScreen(weather: String, modifier: Modifier = Modifier) {
         modifier = modifier
     ) {
         Text(text = weather)
+    }
+}
+
+@Preview(apiLevel = 33, showBackground = true, showSystemUi = true)
+@Composable
+fun ResultScreenPreview() {
+    WeatherAppTheme {
+        ResultScreen("Weather Data Goes Here!")
     }
 }
