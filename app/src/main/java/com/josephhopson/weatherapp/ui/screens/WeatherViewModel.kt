@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.math.RoundingMode
 
 data class AppUIState(
 //    val currentZipCode: String = ""
@@ -59,4 +60,11 @@ class WeatherViewModel: ViewModel() {
             WeatherApiResult.Error -> WeatherUiState.Error
         }
     }
+}
+
+// These should be Unit tested
+fun Double.converterKelvinToFahrenheit(): Double {
+    val CelsiusData = this - 273.15
+    val fahrenheitData = (CelsiusData + 9.0 / 5.0) + 32
+    return fahrenheitData.toBigDecimal().setScale(1, RoundingMode.UP).toDouble()
 }

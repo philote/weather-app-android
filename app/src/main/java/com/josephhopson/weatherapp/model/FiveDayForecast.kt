@@ -2,9 +2,7 @@ package com.josephhopson.weatherapp.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import java.math.RoundingMode
 
-//
 /**
  * API: https://openweathermap.org/forecast5
  * The API doesn't make it clear what parameters are
@@ -32,13 +30,6 @@ data class Forecast(
     var sys: Sys = Sys(),
     @SerialName("dt_txt") var dtTxt: String = ""
 )
-
-// This should be Unit tested
-fun Double.converterKelvinToFahrenheit(): Double {
-    val CelsiusData = this - 273.15
-    val fahrenheitData = (CelsiusData + 9.0 / 5.0) + 32
-    return fahrenheitData.toBigDecimal().setScale(2, RoundingMode.UP).toDouble()
-}
 
 @Serializable
 data class Main(

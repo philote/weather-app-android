@@ -38,7 +38,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.josephhopson.weatherapp.R
 import com.josephhopson.weatherapp.model.Forecast
 import com.josephhopson.weatherapp.model.Main
-import com.josephhopson.weatherapp.model.converterKelvinToFahrenheit
 import com.josephhopson.weatherapp.ui.theme.WeatherAppTheme
 
 @Composable
@@ -131,7 +130,7 @@ fun ForecastCard(
                     fontWeight = FontWeight.Bold
                 )
                 Text(
-                    text = forecast.main.temp.converterKelvinToFahrenheit().toString()
+                    text = "${forecast.main.temp.converterKelvinToFahrenheit()}°F"
                 )
             }
         }
