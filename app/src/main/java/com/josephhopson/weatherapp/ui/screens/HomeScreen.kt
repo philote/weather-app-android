@@ -2,6 +2,7 @@ package com.josephhopson.weatherapp.ui.screens
 
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -43,7 +44,8 @@ import com.josephhopson.weatherapp.ui.theme.WeatherAppTheme
 @Composable
 fun HomeScreen(
     weatherViewModel: WeatherViewModel = viewModel(),
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onItemClick: (Forecast) -> Unit,
 ) {
     val weatherUIState by weatherViewModel.uiState.collectAsState()
     val weatherApiUiState = weatherUIState.weatherUiState
@@ -96,7 +98,8 @@ fun HomeScreen(
             WeatherUiState.Loading -> LoadingScreen()
             WeatherUiState.Error -> ErrorScreen()
             is WeatherUiState.Success -> ForecastListScreen(
-                forecasts = weatherApiUiState.fiveDayForecast.forecasts
+                forecasts = weatherApiUiState.fiveDayForecast.forecasts,
+                onItemClick = onItemClick
             )
         }
     }
@@ -105,12 +108,14 @@ fun HomeScreen(
 @Composable
 fun ForecastCard(
     forecast: Forecast,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onItemClick: (Forecast) -> Unit,
 ) {
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .padding(4.dp),
+            .padding(4.dp)
+            .clickable { onItemClick(forecast) },
         shape = MaterialTheme.shapes.medium,
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
@@ -140,10 +145,14 @@ fun ForecastCard(
 @Composable
 fun ForecastListScreen(
     forecasts: List<Forecast>,
+    onItemClick: (Forecast) -> Unit,
 ) {
     LazyColumn {
         items(forecasts) {forecast ->
-            ForecastCard(forecast)
+            ForecastCard(
+                forecast = forecast,
+                onItemClick = onItemClick
+            )
         }
     }
 }
@@ -210,15 +219,21 @@ fun ErrorScreen() {
 fun ForecastListScreenPreview() {
     WeatherAppTheme {
         ForecastListScreen(
-            arrayListOf(
+            forecasts = arrayListOf(
                 Forecast(
-                    dt = 123,
+                    main = Main(
+                        294.93.converterKelvinToFahrenheit()
+                    ),
+                    dtTxt = "2022-08-30 15:00:00"
+                ),
+                Forecast(
                     main = Main(
                         294.93.converterKelvinToFahrenheit()
                     ),
                     dtTxt = "2022-08-30 15:00:00"
                 )
-            )
+            ),
+            onItemClick = {}
         )
     }
 }
@@ -227,7 +242,9 @@ fun ForecastListScreenPreview() {
 @Composable
 fun HomeScreenPreview() {
     WeatherAppTheme {
-        HomeScreen()
+        HomeScreen(
+            onItemClick = {}
+        )
     }
 }
 

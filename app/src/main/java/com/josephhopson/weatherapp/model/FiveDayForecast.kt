@@ -1,5 +1,7 @@
 package com.josephhopson.weatherapp.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -17,7 +19,7 @@ data class FiveDayForecast(
     var city: City = City()
 )
 
-// List of forecasts
+@Parcelize
 @Serializable
 data class Forecast(
     var dt: Int = -1,
@@ -29,8 +31,9 @@ data class Forecast(
     var pop: Int = -1,
     var sys: Sys = Sys(),
     @SerialName("dt_txt") var dtTxt: String = ""
-)
+) : Parcelable
 
+@Parcelize
 @Serializable
 data class Main(
     var temp: Double = -1.0,
@@ -42,26 +45,32 @@ data class Main(
     @SerialName("grnd_level") var grndLevel: Int = -1,
     var humidity: Int = -1,
     @SerialName("temp_kf") var tempKf: Double = -1.0
-)
+) : Parcelable
 
+@Parcelize
 @Serializable
 data class Weather(
     var id: Int = -1,
     var main: String = "",
     var description: String = "",
     var icon: String = ""
-)
+) : Parcelable
 
-@Serializable data class Clouds( var all: Int = -1)
+@Parcelize
+@Serializable
+data class Clouds( var all: Int = -1) : Parcelable
 
+@Parcelize
 @Serializable
 data class Wind(
     var speed: Double = -1.0,
     var deg: Int = -1,
     var gust: Double = -1.0
-)
+) : Parcelable
 
-@Serializable data class Sys( var pod: String = "")
+@Parcelize
+@Serializable
+data class Sys( var pod: String = "") : Parcelable
 
 // City of Forecast
 @Serializable
