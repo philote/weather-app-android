@@ -7,7 +7,7 @@
 - Use [Room](https://developer.android.com/jetpack/androidx/releases/room) in the repo layer to provide caching for the last fetched weather data set, and the associated zip code.
 - Add unit tests.
 
-## TODO/Notes/Features:
+## TODOs & Notes:
 - Could use [Hilt](https://dagger.dev/hilt/) to (or [manually](https://developer.android.com/training/dependency-injection/manual)) add dependency injection to break the coupling between the ViewModel and the Weather Repository. This will help with writing ViewModel tests, allowing us to pass mock repositories to the ViewModel.
 - In the retrofit services: add the app_id in a more centralized way, maybe using an interceptor.
 - Add an app setting for units of measure.
