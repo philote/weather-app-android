@@ -39,6 +39,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.josephhopson.weatherapp.R
 import com.josephhopson.weatherapp.model.Forecast
 import com.josephhopson.weatherapp.model.Main
+import com.josephhopson.weatherapp.model.Weather
 import com.josephhopson.weatherapp.ui.theme.WeatherAppTheme
 
 @Composable
@@ -135,9 +136,21 @@ fun ForecastCard(
                     fontWeight = FontWeight.Bold
                 )
                 Text(
-                    text = "${forecast.main.temp.converterKelvinToFahrenheit()}°F"
+                    text = "${forecast.main.temp}°F"
                 )
             }
+            Row {
+                Text(
+                    text = "Wind: ",
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = "${forecast.wind.speed} mph"
+                )
+            }
+            Text(
+                text = forecast.weather.joinToString { it.description }
+            )
         }
     }
 }
@@ -171,7 +184,9 @@ fun LoadingScreen() {
         )
         Text(
             text = stringResource(R.string.loading),
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(16.dp),
+            style=MaterialTheme.typography.headlineSmall,
+            color = MaterialTheme.colorScheme.primary
         )
     }
 }
@@ -190,7 +205,10 @@ fun LandingScreen() {
         )
         Text(
             text = stringResource(R.string.enter_your_zip_code_above),
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier
+                .padding(16.dp),
+            style=MaterialTheme.typography.headlineSmall,
+            color = MaterialTheme.colorScheme.primary
         )
     }
 }
@@ -209,7 +227,9 @@ fun ErrorScreen() {
         )
         Text(
             text = stringResource(R.string.error),
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier.padding(16.dp),
+            style=MaterialTheme.typography.headlineSmall,
+            color = MaterialTheme.colorScheme.primary
         )
     }
 }
@@ -222,15 +242,28 @@ fun ForecastListScreenPreview() {
             forecasts = arrayListOf(
                 Forecast(
                     main = Main(
-                        294.93.converterKelvinToFahrenheit()
+                        294.93
                     ),
-                    dtTxt = "2022-08-30 15:00:00"
+                    dtTxt = "2022-08-30 15:00:00",
+                    weather = arrayListOf(
+                        Weather(
+                            description = "clear sky"
+                        ),
+                        Weather(
+                            description = "overcast clouds"
+                        )
+                    )
                 ),
                 Forecast(
                     main = Main(
-                        294.93.converterKelvinToFahrenheit()
+                        294.93
                     ),
-                    dtTxt = "2022-08-30 15:00:00"
+                    dtTxt = "2022-08-30 15:00:00",
+                    weather = arrayListOf(
+                        Weather(
+                            description = "clear sky"
+                        )
+                    )
                 )
             ),
             onItemClick = {}
@@ -238,28 +271,28 @@ fun ForecastListScreenPreview() {
     }
 }
 
-@Preview(apiLevel = 33, showBackground = true, showSystemUi = true)
-@Composable
-fun HomeScreenPreview() {
-    WeatherAppTheme {
-        HomeScreen(
-            onItemClick = {}
-        )
-    }
-}
-
-@Preview(apiLevel = 33, showBackground = true, showSystemUi = true)
-@Composable
-fun LoadingScreenPreview() {
-    WeatherAppTheme {
-        LoadingScreen()
-    }
-}
-
-@Preview(apiLevel = 33, showBackground = true, showSystemUi = true)
-@Composable
-fun ErrorScreenPreview() {
-    WeatherAppTheme {
-        ErrorScreen()
-    }
-}
+//@Preview(apiLevel = 33, showBackground = true, showSystemUi = true)
+//@Composable
+//fun HomeScreenPreview() {
+//    WeatherAppTheme {
+//        HomeScreen(
+//            onItemClick = {}
+//        )
+//    }
+//}
+//
+//@Preview(apiLevel = 33, showBackground = true, showSystemUi = true)
+//@Composable
+//fun LoadingScreenPreview() {
+//    WeatherAppTheme {
+//        LoadingScreen()
+//    }
+//}
+//
+//@Preview(apiLevel = 33, showBackground = true, showSystemUi = true)
+//@Composable
+//fun ErrorScreenPreview() {
+//    WeatherAppTheme {
+//        ErrorScreen()
+//    }
+//}

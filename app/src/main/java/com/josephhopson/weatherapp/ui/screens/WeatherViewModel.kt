@@ -12,12 +12,20 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import java.math.RoundingMode
 
+/**
+ * UI state for the home screen
+ * @property weatherUiState initialized as Landing
+ */
 data class AppUIState(
-//    val currentZipCode: String = ""
     val weatherUiState: WeatherUiState = WeatherUiState.Landing
 )
+
+/**
+ * Weather ui state
+ * 4 possible states the homescreen UI: Success with data, Error, Loading, Landing.
+ * Landing is what is used to represent a fresh UI State, like when the app is started.
+ */
 sealed interface WeatherUiState {
     data class Success(val fiveDayForecast: FiveDayForecast) : WeatherUiState
     data object Error : WeatherUiState
@@ -27,16 +35,29 @@ sealed interface WeatherUiState {
 
 class WeatherViewModel: ViewModel() {
 
-    // backing prop to avoid state updates from other classes
+    // backing properties to avoid state updates from other classes
     private val _uiState = MutableStateFlow(AppUIState())
     val uiState: StateFlow<AppUIState> = _uiState.asStateFlow()
+
+    /** The mutable State that stores the status of the most recent user input for zip code */
     var userZipCode by mutableStateOf("")
         private set
 
+    /**
+     * Update user zip code
+     * @param zipCode
+     */
     fun updateUserZipCode(zipCode: String) {
         userZipCode = zipCode
     }
 
+    /**
+     * Public function to get weather data
+     * Set the UI state to loading
+     * Create a viewModelScope to do work
+     * Start the process of converting the zip code into
+     *  lat/long and then getting the 5 day forecast
+     */
     fun getWeatherData() {
         _uiState.value = AppUIState(
             weatherUiState = WeatherUiState.Loading
@@ -48,6 +69,12 @@ class WeatherViewModel: ViewModel() {
         }
     }
 
+    /**
+     * Private function to get weather data from repo layer
+     * Requests weather data from the Weather repo with the user supplied zip code
+     * Converts the repo api state into ui state, passing along the data in a success state
+     * @return WeatherUiState
+     */
     private suspend fun getWeatherDataFromRepo(): WeatherUiState {
         val weatherRepository = NetworkWeatherDataRepository()
 
@@ -60,11 +87,4 @@ class WeatherViewModel: ViewModel() {
             WeatherApiResult.Error -> WeatherUiState.Error
         }
     }
-}
-
-// These should be Unit tested
-fun Double.converterKelvinToFahrenheit(): Double {
-    val CelsiusData = this - 273.15
-    val fahrenheitData = (CelsiusData + 9.0 / 5.0) + 32
-    return fahrenheitData.toBigDecimal().setScale(1, RoundingMode.UP).toDouble()
 }

@@ -1,8 +1,10 @@
 package com.josephhopson.weatherapp.ui.screens
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -10,13 +12,15 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.josephhopson.weatherapp.R
 import com.josephhopson.weatherapp.model.Forecast
 import com.josephhopson.weatherapp.model.Main
+import com.josephhopson.weatherapp.model.Weather
 import com.josephhopson.weatherapp.ui.theme.WeatherAppTheme
-
 
 @Composable
 fun ForecastDetailsScreen(forecast: Forecast) {
@@ -30,6 +34,11 @@ fun ForecastDetailsScreen(forecast: Forecast) {
         Column(
             modifier = Modifier.padding(8.dp)
         ) {
+            Image(
+                modifier = Modifier.fillMaxWidth().padding(28.dp),
+                painter = painterResource(R.drawable.weather),
+                contentDescription = "Weather Icon"
+            )
             Row {
                 Text(
                     text = "Date: ",
@@ -43,9 +52,57 @@ fun ForecastDetailsScreen(forecast: Forecast) {
                     fontWeight = FontWeight.Bold
                 )
                 Text(
-                    text = "${forecast.main.temp.converterKelvinToFahrenheit()}°F"
+                    text = "${forecast.main.temp}°F"
                 )
             }
+            Row {
+                Text(
+                    text = "Feels Like: ",
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = "${forecast.main.feelsLike}°F"
+                )
+            }
+            Row {
+                Text(
+                    text = "Humidity: ",
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = "${forecast.main.humidity}%"
+                )
+            }
+            Row {
+                Text(
+                    text = "Wind: ",
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = "${forecast.wind.speed} mph"
+                )
+            }
+            Row {
+                Text(
+                    text = "Wind Gusts: ",
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = "${forecast.wind.gust} mph"
+                )
+            }
+            Row {
+                Text(
+                    text = "Cloud Cover ",
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = "${forecast.clouds.all}%"
+                )
+            }
+            Text(
+                text = forecast.weather.joinToString { it.description }
+            )
         }
     }
 }
@@ -57,9 +114,17 @@ fun WeatherAppPreview() {
         ForecastDetailsScreen(
             Forecast(
                 main = Main(
-                    294.93.converterKelvinToFahrenheit()
+                    94.93
                 ),
-                dtTxt = "2022-08-30 15:00:00"
+                dtTxt = "2022-08-30 15:00:00",
+                weather = arrayListOf(
+                    Weather(
+                        description = "clear sky"
+                    ),
+                    Weather(
+                        description = "overcast clouds"
+                    )
+                )
             )
         )
     }

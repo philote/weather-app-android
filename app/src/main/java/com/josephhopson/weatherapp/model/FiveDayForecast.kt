@@ -7,7 +7,8 @@ import kotlinx.serialization.Serializable
 
 /**
  * API: https://openweathermap.org/forecast5
- * The API doesn't make it clear what parameters are
+ * Object used in the serialization of 5 day forecast json from the api
+ * NOTE: The API doesn't make it clear what parameters are
  * optionally returned, so I created some defaults.
  */
 @Serializable
@@ -28,7 +29,9 @@ data class Forecast(
     var clouds: Clouds = Clouds(),
     var wind: Wind = Wind(),
     var visibility: Int = -1,
-    var pop: Int = -1,
+    var pop: Double = -1.0,
+    var rain: Rain = Rain(),
+    var snow: Snow = Snow(),
     var sys: Sys = Sys(),
     @SerialName("dt_txt") var dtTxt: String = ""
 ) : Parcelable
@@ -71,6 +74,18 @@ data class Wind(
 @Parcelize
 @Serializable
 data class Sys( var pod: String = "") : Parcelable
+
+@Parcelize
+@Serializable
+data class Rain(
+    @SerialName("3h") var threeH: Double = -1.0
+) : Parcelable
+
+@Parcelize
+@Serializable
+data class Snow(
+    @SerialName("3h") var threeH: Double = -1.0
+) : Parcelable
 
 // City of Forecast
 @Serializable
