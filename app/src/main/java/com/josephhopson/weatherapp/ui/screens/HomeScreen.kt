@@ -1,6 +1,5 @@
 package com.josephhopson.weatherapp.ui.screens
 
-
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -48,8 +47,8 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     onItemClick: (Forecast) -> Unit,
 ) {
-    val weatherUIState by weatherViewModel.uiState.collectAsState()
-    val weatherApiUiState = weatherUIState.weatherUiState
+    val appUiState by weatherViewModel.uiState.collectAsState()
+    val weatherUiState = appUiState.weatherUiState
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -94,12 +93,12 @@ fun HomeScreen(
                 fontSize = 16.sp
             )
         }
-        when(weatherApiUiState) {
+        when(weatherUiState) {
             WeatherUiState.Landing -> LandingScreen()
             WeatherUiState.Loading -> LoadingScreen()
             WeatherUiState.Error -> ErrorScreen()
             is WeatherUiState.Success -> ForecastListScreen(
-                forecasts = weatherApiUiState.fiveDayForecast.forecasts,
+                forecasts = weatherUiState.fiveDayForecast.forecasts,
                 onItemClick = onItemClick
             )
         }

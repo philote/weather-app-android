@@ -7,7 +7,7 @@
 - Use [Room](https://developer.android.com/jetpack/androidx/releases/room) in the repo layer to provide caching for the last fetched weather data set, and the associated zip code.
 - Add unit tests.
 
-## TODOs & Notes:
+## TODO/Notes/Features:
 - Could use [Hilt](https://dagger.dev/hilt/) to (or [manually](https://developer.android.com/training/dependency-injection/manual)) add dependency injection to break the coupling between the ViewModel and the Weather Repository. This will help with writing ViewModel tests, allowing us to pass mock repositories to the ViewModel.
 - In the retrofit services: add the app_id in a more centralized way, maybe using an interceptor.
 - Add an app setting for units of measure.
@@ -20,7 +20,9 @@
 - More appropriate/consistent use of the theme so light/dark modes work well.
 
 ## Screenshots
-![Splash Screen](Screenshot_Splash.png "Screenshot Splash Screen")
-![Home Screen](Screenshot_Home.png "Screenshot Home Screen")
-![List Screen](Screenshot_List.png "Screenshot List Screen")
-![Detail Screen](Screenshot_Detail.png "Screenshot Detail Screen")
+<p float="middle">
+<img src="Screenshot_Splash.png" alt="Screenshot Splash Screen" width="24%"/>
+<img src="Screenshot_Home.png" alt="Screenshot Home Screen" width="24%"/>
+<img src="Screenshot_List.png" alt="Screenshot List Screen" width="24%"/>
+<img src="Screenshot_Detail.png" alt="Screenshot Detail Screen" width="24%"/>
+</p>
