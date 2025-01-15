@@ -1,7 +1,7 @@
 package com.josephhopson.weatherapp.data
 
 import com.josephhopson.weatherapp.model.GeoData
-import com.josephhopson.weatherapp.network.GeocodingApi
+import com.josephhopson.weatherapp.data.network.GeocodingApi
 
 /**
  * Geocoding repository that fetches Latitude and Longitude from a zip code,

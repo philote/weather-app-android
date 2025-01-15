@@ -1,4 +1,4 @@
-package com.josephhopson.weatherapp.network
+package com.josephhopson.weatherapp.data.network
 
 import com.josephhopson.weatherapp.model.GeoData
 import kotlinx.serialization.json.Json

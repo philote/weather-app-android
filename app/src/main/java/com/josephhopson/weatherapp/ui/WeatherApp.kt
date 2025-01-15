@@ -2,12 +2,15 @@ package com.josephhopson.weatherapp.ui
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.adaptive.ExperimentalMaterial3AdaptiveApi
 import androidx.compose.material3.adaptive.layout.AnimatedPane
 import androidx.compose.material3.adaptive.layout.ListDetailPaneScaffold
@@ -34,51 +37,67 @@ fun WeatherApp() {
         navigator.navigateBack()
     }
 
-    // Scaffold to add a super basic App Bar
-    Scaffold(
-        modifier = Modifier,
-        topBar = { WeatherAppBar() }
-    ) { padding ->
-        ListDetailPaneScaffold(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding),
-            directive = navigator.scaffoldDirective,
-            value = navigator.scaffoldValue,
-            listPane = {
-                AnimatedPane {
-                    HomeScreen(
-                        onItemClick = { forecast ->
-                            navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, forecast)
+    ListDetailPaneScaffold(
+        modifier = Modifier
+            .fillMaxSize(),
+        directive = navigator.scaffoldDirective,
+        value = navigator.scaffoldValue,
+        listPane = {
+            AnimatedPane {
+                HomeScreen(
+                    onItemClick = { forecast ->
+                        navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, forecast)
+                    }
+                )
+            }
+        },
+        detailPane = {
+            AnimatedPane {
+                navigator.currentDestination?.content?.let { forecast ->
+                    ForecastDetailsScreen(
+                        forecast = forecast,
+                        onItemClick = {
+                            navigator.navigateTo(ListDetailPaneScaffoldRole.List)
                         }
                     )
                 }
-            },
-            detailPane = {
-                AnimatedPane {
-                    navigator.currentDestination?.content?.let { forecast ->
-                        ForecastDetailsScreen(forecast)
-                    }
-                }
-            },
-        )
-    }
+            }
+        },
+    )
 }
 
+/**
+ * App bar to display title and conditionally display the back navigation.
+ */
 @Composable
-fun WeatherAppBar(modifier: Modifier = Modifier) {
+fun WeatherAppBar(
+    title: String,
+    canNavigateBack: Boolean,
+    modifier: Modifier = Modifier,
+    scrollBehavior: TopAppBarScrollBehavior? = null,
+    navigateUp: () -> Unit = {}
+) {
     TopAppBar(
+        title = { Text(
+            title,
+            style = MaterialTheme.typography.headlineSmall,
+            ) },
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
             titleContentColor = MaterialTheme.colorScheme.primary,
         ),
-        title = {
-            Text(
-                text = stringResource(R.string.app_name),
-                style = MaterialTheme.typography.headlineSmall,
-            )
-        },
-        modifier = modifier
+        scrollBehavior = scrollBehavior,
+        modifier = modifier,
+        navigationIcon = {
+            if (canNavigateBack) {
+                IconButton(onClick = navigateUp) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = stringResource(R.string.back_button)
+                    )
+                }
+            }
+        }
     )
 }
 

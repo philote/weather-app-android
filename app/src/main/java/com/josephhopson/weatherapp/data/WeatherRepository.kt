@@ -2,7 +2,7 @@ package com.josephhopson.weatherapp.data
 
 import android.util.Log
 import com.josephhopson.weatherapp.model.FiveDayForecast
-import com.josephhopson.weatherapp.network.WeatherApi
+import com.josephhopson.weatherapp.data.network.WeatherApi
 import retrofit2.HttpException
 import java.io.IOException
 
