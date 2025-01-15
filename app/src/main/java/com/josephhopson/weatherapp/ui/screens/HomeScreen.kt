@@ -39,15 +39,16 @@ import com.josephhopson.weatherapp.R
 import com.josephhopson.weatherapp.model.Forecast
 import com.josephhopson.weatherapp.model.Main
 import com.josephhopson.weatherapp.model.Weather
+import com.josephhopson.weatherapp.ui.AppViewModelProvider
 import com.josephhopson.weatherapp.ui.theme.WeatherAppTheme
 
 @Composable
 fun HomeScreen(
-    weatherViewModel: WeatherViewModel = viewModel(),
+    viewModel: WeatherViewModel = viewModel(factory = AppViewModelProvider.Factory),
     modifier: Modifier = Modifier,
     onItemClick: (Forecast) -> Unit,
 ) {
-    val appUiState by weatherViewModel.uiState.collectAsState()
+    val appUiState by viewModel.uiState.collectAsState()
     val weatherUiState = appUiState.weatherUiState
     Column(
         modifier = modifier
@@ -58,7 +59,7 @@ fun HomeScreen(
     ) {
         val focusManager = LocalFocusManager.current
         OutlinedTextField(
-            value = weatherViewModel.userZipCode,
+            value = viewModel.userZipCode,
             singleLine = true,
             shape = MaterialTheme.shapes.large,
             modifier = modifier.fillMaxWidth(),
@@ -67,7 +68,7 @@ fun HomeScreen(
                 unfocusedContainerColor = MaterialTheme.colorScheme.surface,
                 disabledContainerColor = MaterialTheme.colorScheme.surface,
             ),
-            onValueChange = { weatherViewModel.updateUserZipCode(it) },
+            onValueChange = { viewModel.updateUserZipCode(it) },
             label = { Text(stringResource(R.string.txt_field_enter_your_zip)) },
             isError = false,
             keyboardOptions = KeyboardOptions.Default.copy(
@@ -76,7 +77,7 @@ fun HomeScreen(
             ),
             keyboardActions = KeyboardActions(
                 onDone = {
-                    weatherViewModel.getWeatherData()
+                    viewModel.getWeatherData()
                     focusManager.clearFocus()
                 }
             )
@@ -84,7 +85,7 @@ fun HomeScreen(
         Button(
             modifier = Modifier.fillMaxWidth(),
             onClick = {
-                weatherViewModel.getWeatherData()
+                viewModel.getWeatherData()
                 focusManager.clearFocus()
             })
         {

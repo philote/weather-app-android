@@ -5,8 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.josephhopson.weatherapp.data.NetworkWeatherDataRepository
 import com.josephhopson.weatherapp.data.WeatherApiResult
+import com.josephhopson.weatherapp.data.WeatherRepository
 import com.josephhopson.weatherapp.model.FiveDayForecast
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -33,7 +33,7 @@ sealed interface WeatherUiState {
     data object Landing : WeatherUiState
 }
 
-class WeatherViewModel: ViewModel() {
+class WeatherViewModel(private val weatherRepository: WeatherRepository): ViewModel() {
 
     // backing properties to avoid state updates from other classes
     private val _uiState = MutableStateFlow(AppUIState())
@@ -76,8 +76,6 @@ class WeatherViewModel: ViewModel() {
      * @return WeatherUiState
      */
     private suspend fun getWeatherDataFromRepo(): WeatherUiState {
-        val weatherRepository = NetworkWeatherDataRepository()
-
         return when(
             val weatherApiResult = weatherRepository.getWeatherForecast(userZipCode)
         ) {

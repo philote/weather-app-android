@@ -8,7 +8,6 @@
 - Add unit tests.
 
 ## TODO/Notes/Features:
-- Could use [Hilt](https://dagger.dev/hilt/) to (or [manually](https://developer.android.com/training/dependency-injection/manual)) add dependency injection to break the coupling between the ViewModel and the Weather Repository. This will help with writing ViewModel tests, allowing us to pass mock repositories to the ViewModel.
 - In the retrofit services: add the app_id in a more centralized way, maybe using an interceptor.
 - Add an app setting for units of measure.
 - Get the user's language from the system and send it on the api requests.
